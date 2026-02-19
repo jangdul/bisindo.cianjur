@@ -2,108 +2,94 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Kelas BISINDO Cianjur</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f4f6f9; }
-        .card-container { max-width: 400px; margin: 50px auto; }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        .logo { text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 20px; color: #2c3e50; cursor: pointer; }
+        input, select, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #3498db; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #2980b9; }
+        .toggle-link { text-align: center; color: #3498db; cursor: pointer; font-size: 14px; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<div class="container card-container">
-    <div class="text-center mb-4">
-        <img src="https://via.placeholder.com/100x100?text=Logo" alt="Logo Kelas BISINDO" class="rounded-circle mb-2">
-        <h4>Kelas BISINDO Cianjur</h4>
+<div class="container">
+    <div class="logo" onclick="alert('Selamat datang di Kelas BISINDO Cianjur!')">Kelas BISINDO Cianjur</div>
+
+    <div id="login-form">
+        <h3 style="text-align: center;">Login</h3>
+        <input type="email" id="login-email" placeholder="Email" required>
+        <input type="password" id="login-password" placeholder="Password" required>
+        <button onclick="login()">Masuk</button>
+        <div class="toggle-link" onclick="toggleForm()">Belum punya akun? Daftar di sini</div>
     </div>
 
-    <div class="card shadow-sm" id="loginCard">
-        <div class="card-body">
-            <h5 class="card-title text-center mb-4">Masuk</h5>
-            <form id="loginForm">
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-control" id="loginEmail" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
-            </form>
-            <div class="text-center mt-3">
-                <small>Belum punya akun? <a href="#" onclick="toggleForm('register')">Daftar di sini</a></small>
-            </div>
-            <div class="text-center mt-2">
-                <small><a href="admin.html" class="text-danger">Masuk sebagai Admin</a></small>
-            </div>
-        </div>
-    </div>
-
-    <div class="card shadow-sm d-none" id="registerCard">
-        <div class="card-body">
-            <h5 class="card-title text-center mb-4">Daftar Peserta</h5>
-            <form id="registerForm">
-                <div class="mb-3"><input type="text" class="form-control" id="regNama" placeholder="Nama Lengkap" required></div>
-                <div class="mb-3">
-                    <select class="form-select" id="regGender" required>
-                        <option value="">Pilih Jenis Kelamin</option>
-                        <option value="Laki-laki">Laki-laki</option>
-                        <option value="Perempuan">Perempuan</option>
-                    </select>
-                </div>
-                <div class="mb-3"><textarea class="form-control" id="regAlamat" placeholder="Alamat" rows="2" required></textarea></div>
-                <div class="mb-3"><input type="text" class="form-control" id="regPekerjaan" placeholder="Pekerjaan" required></div>
-                <div class="mb-3"><input type="email" class="form-control" id="regEmail" placeholder="Email" required></div>
-                
-                <button type="submit" class="btn btn-success w-100">Daftar</button>
-            </form>
-            <div class="text-center mt-3">
-                <small>Sudah punya akun? <a href="#" onclick="toggleForm('login')">Login di sini</a></small>
-            </div>
-        </div>
+    <div id="register-form" class="hidden">
+        <h3 style="text-align: center;">Daftar Peserta</h3>
+        <input type="text" id="reg-nama" placeholder="Nama Lengkap" required>
+        <select id="reg-gender">
+            <option value="">Pilih Jenis Kelamin</option>
+            <option value="Laki-laki">Laki-laki</option>
+            <option value="Perempuan">Perempuan</option>
+        </select>
+        <input type="text" id="reg-alamat" placeholder="Alamat" required>
+        <input type="text" id="reg-pekerjaan" placeholder="Pekerjaan" required>
+        <input type="email" id="reg-email" placeholder="Email" required>
+        <input type="password" id="reg-password" placeholder="Password" required>
+        <button onclick="register()">Daftar</button>
+        <div class="toggle-link" onclick="toggleForm()">Sudah punya akun? Login di sini</div>
     </div>
 </div>
 
 <script>
-    function toggleForm(type) {
-        document.getElementById('loginCard').classList.toggle('d-none', type === 'register');
-        document.getElementById('registerCard').classList.toggle('d-none', type === 'login');
+    function toggleForm() {
+        document.getElementById('login-form').classList.toggle('hidden');
+        document.getElementById('register-form').classList.toggle('hidden');
     }
 
-    // Proses Pendaftaran
-    document.getElementById('registerForm').addEventListener('submit', function(e) {
-        e.preventDefault();
+    function register() {
         const user = {
-            nama: document.getElementById('regNama').value,
-            gender: document.getElementById('regGender').value,
-            alamat: document.getElementById('regAlamat').value,
-            pekerjaan: document.getElementById('regPekerjaan').value,
-            email: document.getElementById('regEmail').value
+            id: Date.now(),
+            nama: document.getElementById('reg-nama').value,
+            gender: document.getElementById('reg-gender').value,
+            alamat: document.getElementById('reg-alamat').value,
+            pekerjaan: document.getElementById('reg-pekerjaan').value,
+            email: document.getElementById('reg-email').value,
+            password: document.getElementById('reg-password').value
         };
-        
+
+        if(!user.nama || !user.email || !user.password) return alert("Mohon lengkapi data utama!");
+
         let users = JSON.parse(localStorage.getItem('pesertaBisindo')) || [];
-        // Cek email ganda
-        if(users.some(u => u.email === user.email)) {
-            alert('Email sudah terdaftar!'); return;
-        }
-        
         users.push(user);
         localStorage.setItem('pesertaBisindo', JSON.stringify(users));
-        alert('Pendaftaran berhasil! Silakan login.');
-        this.reset();
-        toggleForm('login');
-    });
-
-    // Proses Login
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        let users = JSON.parse(localStorage.getItem('pesertaBisindo')) || [];
         
-        if(users.some(u => u.email === email)) {
+        alert("Pendaftaran berhasil! Silakan login.");
+        toggleForm();
+    }
+
+    function login() {
+        const email = document.getElementById('login-email').value;
+        const pass = document.getElementById('login-password').value;
+
+        // Kredensial Admin Hardcoded
+        if(email === 'admin@gerkatin.org' && pass === 'admin123') {
+            window.location.href = 'admin.html';
+            return;
+        }
+
+        let users = JSON.parse(localStorage.getItem('pesertaBisindo')) || [];
+        let validUser = users.find(u => u.email === email && u.password === pass);
+
+        if(validUser) {
             window.location.href = 'menu.html';
         } else {
-            alert('Email tidak ditemukan. Silakan daftar terlebih dahulu.');
+            alert("Email atau password salah!");
         }
-    });
+    }
 </script>
 </body>
 </html>
