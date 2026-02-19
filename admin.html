@@ -3,59 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin - Data Peserta</title>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; }
-        .container { background: white; padding: 20px; border-radius: 8px; max-width: 800px; margin: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        table, th, td { border: 1px solid #ddd; }
-        th, td { padding: 12px; text-align: left; }
-        th { background-color: #0056b3; color: white; }
-        .nav-back { display: block; margin-top: 20px; color: #d9534f; text-decoration: none; font-weight: bold; }
-    </style>
+    <title>Admin - Data Peserta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100 min-h-screen p-8">
 
-<div class="container">
-    <h2>Data Peserta Belajar Bahasa Isyarat</h2>
-    <p>Daftar pengguna yang telah melakukan registrasi.</p>
-    
-    <table>
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Nama Peserta</th>
-                <th>Asal / Instansi</th>
-                <th>Tanggal Daftar</th>
-            </tr>
-        </thead>
-        <tbody id="tabelPeserta">
-            </tbody>
-    </table>
+    <div class="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">Panel Admin: Data Peserta</h1>
+            <a href="index.html" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Kembali ke Depan</a>
+        </div>
 
-    <a href="index.html" class="nav-back">Kembali ke Login</a>
-</div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-700 text-sm">
+                        <th class="p-3 border">Nama Lengkap</th>
+                        <th class="p-3 border">Jenis Kelamin</th>
+                        <th class="p-3 border">Alamat</th>
+                        <th class="p-3 border">Pekerjaan</th>
+                        <th class="p-3 border">Email</th>
+                        <th class="p-3 border text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelPeserta" class="text-sm">
+                    </tbody>
+            </table>
+        </div>
+    </div>
 
-<script>
-    // Mengambil data dari localStorage
-    const users = JSON.parse(localStorage.getItem('pesertaIsyarat')) || [];
-    const tbody = document.getElementById('tabelPeserta');
+    <script>
+        function muatData() {
+            const tbody = document.getElementById('tabelPeserta');
+            tbody.innerHTML = '';
+            let dataPeserta = JSON.parse(localStorage.getItem('pesertaBisindo')) || [];
 
-    if (users.length === 0) {
-        tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>Belum ada peserta yang mendaftar.</td></tr>";
-    } else {
-        users.forEach((user, index) => {
-            let tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${user.nama}</td>
-                <td>${user.asal}</td>
-                <td>${user.tanggal}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-    }
-</script>
+            if (dataPeserta.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-gray-500 border">Belum ada data peserta.</td></tr>';
+                return;
+            }
 
+            dataPeserta.forEach(peserta => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b hover:bg-gray-50";
+                tr.innerHTML = `
+                    <td class="p-3 border">${peserta.nama}</td>
+                    <td class="p-3 border">${peserta.gender}</td>
+                    <td class="p-3 border">${peserta.alamat}</td>
+                    <td class="p-3 border">${peserta.pekerjaan}</td>
+                    <td class="p-3 border">${peserta.email}</td>
+                    <td class="p-3 border text-center">
+                        <button onclick="hapusPeserta(${peserta.id})" class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600">Hapus</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function hapusPeserta(id) {
+            if (confirm('Yakin ingin menghapus peserta ini?')) {
+                let dataPeserta = JSON.parse(localStorage.getItem('pesertaBisindo')) || [];
+                dataPeserta = dataPeserta.filter(p => p.id !== id);
+                localStorage.setItem('pesertaBisindo', JSON.stringify(dataPeserta));
+                muatData(); // Refresh tabel
+            }
+        }
+
+        // Muat data saat halaman dibuka
+        window.onload = muatData;
+    </script>
 </body>
 </html>
