@@ -2,92 +2,89 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Kelas BISINDO Cianjur</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        .logo { text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 20px; color: #2c3e50; cursor: pointer; }
-        input, select, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { background-color: #3498db; color: white; border: none; cursor: pointer; font-weight: bold; }
-        button:hover { background-color: #2980b9; }
-        .toggle-link { text-align: center; color: #3498db; cursor: pointer; font-size: 14px; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        .logo { font-size: 24px; font-weight: bold; color: #0056b3; margin-bottom: 20px; }
+        input, select, button { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #0056b3; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #004494; }
+        .toggle-link { color: #0056b3; cursor: pointer; text-decoration: underline; font-size: 14px; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="logo" onclick="alert('Selamat datang di Kelas BISINDO Cianjur!')">Kelas BISINDO Cianjur</div>
-
-    <div id="login-form">
-        <h3 style="text-align: center;">Login</h3>
-        <input type="email" id="login-email" placeholder="Email" required>
-        <input type="password" id="login-password" placeholder="Password" required>
-        <button onclick="login()">Masuk</button>
-        <div class="toggle-link" onclick="toggleForm()">Belum punya akun? Daftar di sini</div>
+    <div class="logo">✋ Kelas BISINDO Cianjur</div>
+    
+    <div id="loginSection">
+        <h3>Masuk</h3>
+        <input type="email" id="loginEmail" placeholder="Masukkan Email">
+        <select id="loginRole">
+            <option value="peserta">Peserta</option>
+            <option value="admin">Admin</option>
+        </select>
+        <button onclick="login()">Login</button>
+        <p class="toggle-link" onclick="toggleForm()">Belum punya akun? Daftar Peserta</p>
     </div>
 
-    <div id="register-form" class="hidden">
-        <h3 style="text-align: center;">Daftar Peserta</h3>
-        <input type="text" id="reg-nama" placeholder="Nama Lengkap" required>
-        <select id="reg-gender">
-            <option value="">Pilih Jenis Kelamin</option>
+    <div id="registerSection" class="hidden">
+        <h3>Daftar Peserta</h3>
+        <input type="text" id="regNama" placeholder="Nama Lengkap" required>
+        <select id="regGender">
             <option value="Laki-laki">Laki-laki</option>
             <option value="Perempuan">Perempuan</option>
         </select>
-        <input type="text" id="reg-alamat" placeholder="Alamat" required>
-        <input type="text" id="reg-pekerjaan" placeholder="Pekerjaan" required>
-        <input type="email" id="reg-email" placeholder="Email" required>
-        <input type="password" id="reg-password" placeholder="Password" required>
-        <button onclick="register()">Daftar</button>
-        <div class="toggle-link" onclick="toggleForm()">Sudah punya akun? Login di sini</div>
+        <input type="text" id="regAlamat" placeholder="Alamat (Cianjur dsk.)" required>
+        <input type="text" id="regPekerjaan" placeholder="Pekerjaan" required>
+        <input type="email" id="regEmail" placeholder="Email" required>
+        <button onclick="register()">Daftar & Masuk</button>
+        <p class="toggle-link" onclick="toggleForm()">Sudah punya akun? Login</p>
     </div>
 </div>
 
 <script>
     function toggleForm() {
-        document.getElementById('login-form').classList.toggle('hidden');
-        document.getElementById('register-form').classList.toggle('hidden');
+        document.getElementById('loginSection').classList.toggle('hidden');
+        document.getElementById('registerSection').classList.toggle('hidden');
     }
 
     function register() {
-        const user = {
-            id: Date.now(),
-            nama: document.getElementById('reg-nama').value,
-            gender: document.getElementById('reg-gender').value,
-            alamat: document.getElementById('reg-alamat').value,
-            pekerjaan: document.getElementById('reg-pekerjaan').value,
-            email: document.getElementById('reg-email').value,
-            password: document.getElementById('reg-password').value
-        };
+        const nama = document.getElementById('regNama').value;
+        const gender = document.getElementById('regGender').value;
+        const alamat = document.getElementById('regAlamat').value;
+        const pekerjaan = document.getElementById('regPekerjaan').value;
+        const email = document.getElementById('regEmail').value;
 
-        if(!user.nama || !user.email || !user.password) return alert("Mohon lengkapi data utama!");
+        if(!nama || !alamat || !pekerjaan || !email) return alert("Isi semua data!");
 
-        let users = JSON.parse(localStorage.getItem('pesertaBisindo')) || [];
-        users.push(user);
-        localStorage.setItem('pesertaBisindo', JSON.stringify(users));
+        let peserta = JSON.parse(localStorage.getItem('dataPeserta')) || [];
+        peserta.push({ nama, gender, alamat, pekerjaan, email });
+        localStorage.setItem('dataPeserta', JSON.stringify(peserta));
         
-        alert("Pendaftaran berhasil! Silakan login.");
-        toggleForm();
+        alert("Pendaftaran berhasil! Mengalihkan ke menu...");
+        window.location.href = "menu.html";
     }
 
     function login() {
-        const email = document.getElementById('login-email').value;
-        const pass = document.getElementById('login-password').value;
+        const email = document.getElementById('loginEmail').value;
+        const role = document.getElementById('loginRole').value;
 
-        // Kredensial Admin Hardcoded
-        if(email === 'admin@gerkatin.org' && pass === 'admin123') {
-            window.location.href = 'admin.html';
-            return;
-        }
-
-        let users = JSON.parse(localStorage.getItem('pesertaBisindo')) || [];
-        let validUser = users.find(u => u.email === email && u.password === pass);
-
-        if(validUser) {
-            window.location.href = 'menu.html';
+        if(role === 'admin' && email === 'admin@cianjur.com') { // Email admin default
+            window.location.href = "admin.html";
+        } else if (role === 'peserta') {
+            let peserta = JSON.parse(localStorage.getItem('dataPeserta')) || [];
+            let cekPeserta = peserta.find(p => p.email === email);
+            if(cekPeserta) {
+                window.location.href = "menu.html";
+            } else {
+                alert("Email tidak ditemukan. Silakan daftar.");
+            }
         } else {
-            alert("Email atau password salah!");
+            alert("Email admin salah!");
         }
     }
 </script>
