@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Kelas BISINDO</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 800px; margin: auto; }
+        .menu-btn { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        .video-container { display: none; margin-top: 20px; }
+        iframe { width: 315px; height: 560px; border: none; border-radius: 12px; margin-right: 10px; }
+    </style>
+</head>
+<body>
+
+    <h2>Dashboard Kelas BISINDO</h2>
+    <a href="index.html">Keluar (Logout)</a>
+    <hr>
+
+    <h3>Pilih Modul Pembelajaran:</h3>
+    <button class="menu-btn" onclick="showModule('modul-abjad')">Modul Abjad</button>
+    <button class="menu-btn" onclick="showModule('modul-angka')">Modul Angka</button>
+    <button class="menu-btn" onclick="showModule('modul-sapaan')">Modul Sapaan</button>
+
+    <div id="modul-abjad" class="video-container">
+        <h4>Huruf A, B, C</h4>
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_A" title="Huruf A"></iframe>
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_B" title="Huruf B"></iframe>
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_C" title="Huruf C"></iframe>
+    </div>
+
+    <div id="modul-angka" class="video-container">
+        <h4>Angka 1, 2, 3</h4>
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_1" title="Angka 1"></iframe>
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_2" title="Angka 2"></iframe>
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_3" title="Angka 3"></iframe>
+    </div>
+
+    <div id="modul-sapaan" class="video-container">
+        <h4>Halo, Hai, Selamat</h4>
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_HALO" title="Halo"></iframe>
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_HAI" title="Hai"></iframe>
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_SELAMAT" title="Selamat"></iframe>
+    </div>
+
+<script>
+    function showModule(moduleId) {
+        // Sembunyikan semua modul
+        document.querySelectorAll('.video-container').forEach(el => el.style.display = 'none');
+        // Tampilkan modul yang dipilih
+        document.getElementById(moduleId).style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
