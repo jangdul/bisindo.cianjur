@@ -3,37 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Kelas BISINDO</title>
+    <title>Panel Tutor - Kelas BISINDO</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; max-width: 800px; margin: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-        th { background-color: #f4f4f4; }
-        .btn-delete { color: white; background: red; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px;}
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
+        body { font-family: 'Poppins', sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; color: #333; }
+        header { background-color: #27ae60; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        header h2 { margin: 0; font-size: 22px; }
+        .logout-btn { color: #27ae60; background: white; padding: 8px 16px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 14px; }
+        
+        .main-content { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow-x: auto; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #ecf0f1; }
+        th { background-color: #f8f9fa; color: #2c3e50; font-weight: 600; white-space: nowrap; }
+        tr:hover { background-color: #fdfdfd; }
+        
+        .btn-delete { 
+            background: #e74c3c; color: white; border: none; 
+            padding: 8px 12px; border-radius: 6px; cursor: pointer; 
+            font-family: 'Poppins', sans-serif; font-size: 12px; transition: 0.2s;
+        }
+        .btn-delete:hover { background: #c0392b; }
+        .empty-state { text-align: center; color: #95a5a6; padding: 30px; }
     </style>
 </head>
 <body>
 
-    <h2>Dashboard Admin</h2>
-    <a href="index.html">Keluar (Logout)</a>
-    <hr>
+    <header>
+        <h2>Panel Pengelola Kelas</h2>
+        <a href="index.html" class="logout-btn">Keluar Admin</a>
+    </header>
 
-    <h3>Daftar Peserta Kelas</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Nama Lengkap</th>
-                <th>Gender</th>
-                <th>Alamat</th>
-                <th>Pekerjaan</th>
-                <th>Email</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody id="tabel-peserta">
-            </tbody>
-    </table>
+    <div class="main-content">
+        <div class="card">
+            <h3>Daftar Peserta Kelas BISINDO</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Lengkap</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Alamat</th>
+                        <th>Pekerjaan</th>
+                        <th>Email</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="tabel-peserta">
+                    </tbody>
+            </table>
+        </div>
+    </div>
 
 <script>
     function loadData() {
@@ -43,7 +65,7 @@
         tbody.innerHTML = '';
         
         if (users.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Belum ada peserta terdaftar.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Belum ada peserta yang mendaftar di kelas ini.</td></tr>';
             return;
         }
 
@@ -51,7 +73,7 @@
             tbody.innerHTML += `
                 <tr>
                     <td>${index + 1}</td>
-                    <td>${user.nama}</td>
+                    <td><strong>${user.nama}</strong></td>
                     <td>${user.gender}</td>
                     <td>${user.alamat}</td>
                     <td>${user.pekerjaan}</td>
@@ -63,16 +85,15 @@
     }
 
     function hapusPeserta(index) {
-        if (confirm("Yakin ingin menghapus peserta ini?")) {
+        if (confirm("Apakah Anda yakin ingin menghapus data peserta ini?")) {
             let users = JSON.parse(localStorage.getItem('bisindo_users')) || [];
-            users.splice(index, 1); // Hapus 1 data pada index yang dipilih
+            users.splice(index, 1);
             localStorage.setItem('bisindo_users', JSON.stringify(users));
-            loadData(); // Muat ulang tabel
+            loadData();
         }
     }
 
-    // Muat data saat halaman dibuka
-    loadData();
+    window.onload = loadData;
 </script>
 
 </body>
