@@ -3,77 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Data Peserta</title>
+    <title>Admin - Kelas BISINDO</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #0056b3; color: white; }
-        .btn-hapus { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
-        .btn-hapus:hover { background-color: #c82333; }
+        body { font-family: sans-serif; padding: 20px; max-width: 800px; margin: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        .btn-delete { color: white; background: red; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px;}
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h2>Dashboard Admin Kelas BISINDO</h2>
-    <a href="index.html" style="color: red; text-decoration: none; font-weight: bold;">Keluar</a>
-</div>
+    <h2>Dashboard Admin</h2>
+    <a href="index.html">Keluar (Logout)</a>
+    <hr>
 
-<table>
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>Nama Lengkap</th>
-            <th>Jenis Kelamin</th>
-            <th>Alamat</th>
-            <th>Pekerjaan</th>
-            <th>Email</th>
-            <th>Aksi</th>
-        </tr>
-    </thead>
-    <tbody id="tabelPeserta">
-        </tbody>
-</table>
+    <h3>Daftar Peserta Kelas</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama Lengkap</th>
+                <th>Gender</th>
+                <th>Alamat</th>
+                <th>Pekerjaan</th>
+                <th>Email</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody id="tabel-peserta">
+            </tbody>
+    </table>
 
 <script>
-    function muatData() {
-        const tbody = document.getElementById('tabelPeserta');
+    function loadData() {
+        const tbody = document.getElementById('tabel-peserta');
+        let users = JSON.parse(localStorage.getItem('bisindo_users')) || [];
+        
         tbody.innerHTML = '';
-        let peserta = JSON.parse(localStorage.getItem('dataPeserta')) || [];
-
-        if (peserta.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Belum ada data peserta</td></tr>';
+        
+        if (users.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Belum ada peserta terdaftar.</td></tr>';
             return;
         }
 
-        peserta.forEach((p, index) => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${p.nama}</td>
-                <td>${p.gender}</td>
-                <td>${p.alamat}</td>
-                <td>${p.pekerjaan}</td>
-                <td>${p.email}</td>
-                <td><button class="btn-hapus" onclick="hapusPeserta(${index})">Hapus</button></td>
+        users.forEach((user, index) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${user.nama}</td>
+                    <td>${user.gender}</td>
+                    <td>${user.alamat}</td>
+                    <td>${user.pekerjaan}</td>
+                    <td>${user.email}</td>
+                    <td><button class="btn-delete" onclick="hapusPeserta(${index})">Hapus</button></td>
+                </tr>
             `;
-            tbody.appendChild(tr);
         });
     }
 
     function hapusPeserta(index) {
-        if(confirm("Yakin ingin menghapus peserta ini?")) {
-            let peserta = JSON.parse(localStorage.getItem('dataPeserta')) || [];
-            peserta.splice(index, 1); // Hapus 1 data pada index tertentu
-            localStorage.setItem('dataPeserta', JSON.stringify(peserta));
-            muatData(); // Refresh tabel
+        if (confirm("Yakin ingin menghapus peserta ini?")) {
+            let users = JSON.parse(localStorage.getItem('bisindo_users')) || [];
+            users.splice(index, 1); // Hapus 1 data pada index yang dipilih
+            localStorage.setItem('bisindo_users', JSON.stringify(users));
+            loadData(); // Muat ulang tabel
         }
     }
 
-    // Panggil fungsi saat halaman dimuat
-    window.onload = muatData;
+    // Muat data saat halaman dibuka
+    loadData();
 </script>
+
 </body>
 </html>
