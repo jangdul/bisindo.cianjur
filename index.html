@@ -3,44 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelas BISINDO Cianjur - Login</title>
+    <title>Kelas BISINDO Cianjur - Ayo Belajar Bisindo</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; }
-        .container { max-width: 400px; margin: auto; border: 1px solid #ccc; padding: 20px; border-radius: 8px; }
-        input, select, button { width: 100%; margin: 8px 0; padding: 10px; box-sizing: border-box; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: #f0f8ff; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+        }
+        .container { 
+            background: white; 
+            width: 100%; max-width: 450px; 
+            padding: 40px 30px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+            text-align: center;
+        }
+        .logo-text { color: #2c3e50; font-weight: 600; font-size: 24px; margin-bottom: 5px; }
+        .subtitle { color: #7f8c8d; font-size: 14px; margin-bottom: 30px; }
+        h3 { color: #34495e; margin-bottom: 20px; }
+        
+        input, select { 
+            width: 100%; padding: 12px 15px; margin-bottom: 15px;
+            border: 1px solid #dfe6e9; border-radius: 8px;
+            font-family: 'Poppins', sans-serif; font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        input:focus, select:focus { border-color: #3498db; outline: none; }
+        
+        button { 
+            width: 100%; padding: 14px; 
+            background-color: #3498db; color: white; 
+            border: none; border-radius: 8px; 
+            font-size: 16px; font-weight: 600; cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover { background-color: #2980b9; }
+        
+        p { margin-top: 15px; font-size: 14px; color: #7f8c8d; }
+        a { color: #3498db; text-decoration: none; font-weight: 600; }
+        a:hover { text-decoration: underline; }
         .hidden { display: none; }
+        .admin-hint { margin-top: 25px; font-size: 12px; color: #bdc3c7; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Kelas BISINDO Cianjur</h2>
-    <p>Belajar Bahasa Isyarat Lebih Mudah</p>
+    <div class="logo-text">Kelas BISINDO Cianjur</div>
+    <div class="subtitle">Program Ayo Belajar Bisindo</div>
 
     <div id="login-section">
-        <h3>Login</h3>
-        <input type="email" id="login-email" placeholder="Masukkan Email">
+        <h3>Masuk ke Akun</h3>
+        <input type="email" id="login-email" placeholder="Masukkan Email Anda" required>
         <button onclick="login()">Masuk</button>
         <p>Belum punya akun? <a href="#" onclick="toggleView('register-section')">Daftar di sini</a></p>
-        <p><small><i>Untuk ke halaman admin, gunakan email: admin@cianjur.com</i></small></p>
+        <p class="admin-hint">Akses Admin Tutor: admin@cianjur.com</p>
     </div>
 
     <div id="register-section" class="hidden">
-        <h3>Daftar Peserta</h3>
+        <h3>Pendaftaran Peserta</h3>
         <input type="text" id="reg-nama" placeholder="Nama Lengkap" required>
         <select id="reg-gender">
+            <option value="" disabled selected>Pilih Jenis Kelamin</option>
             <option value="Laki-laki">Laki-laki</option>
             <option value="Perempuan">Perempuan</option>
         </select>
-        <input type="text" id="reg-alamat" placeholder="Alamat">
+        <input type="text" id="reg-alamat" placeholder="Alamat Domisili">
         <input type="text" id="reg-pekerjaan" placeholder="Pekerjaan">
-        <input type="email" id="reg-email" placeholder="Email" required>
-        <button onclick="register()">Daftar</button>
-        <p>Sudah punya akun? <a href="#" onclick="toggleView('login-section')">Kembali ke Login</a></p>
+        <input type="email" id="reg-email" placeholder="Alamat Email" required>
+        <button onclick="register()">Daftar Sekarang</button>
+        <p>Sudah mendaftar? <a href="#" onclick="toggleView('login-section')">Kembali ke Login</a></p>
     </div>
 </div>
 
 <script>
+    // Logika JavaScript tetap sama seperti sebelumnya
     function toggleView(showId) {
         document.getElementById('login-section').classList.add('hidden');
         document.getElementById('register-section').classList.add('hidden');
@@ -54,7 +97,7 @@
         const pekerjaan = document.getElementById('reg-pekerjaan').value;
         const email = document.getElementById('reg-email').value;
 
-        if(!nama || !email) return alert("Nama dan Email wajib diisi!");
+        if(!nama || !email || !gender) return alert("Nama, Jenis Kelamin, dan Email wajib diisi!");
 
         let users = JSON.parse(localStorage.getItem('bisindo_users')) || [];
         users.push({ nama, gender, alamat, pekerjaan, email });
