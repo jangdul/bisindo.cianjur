@@ -3,88 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Kelas BISINDO Cianjur</title>
+    <title>Kelas BISINDO Cianjur - Login</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
-        .logo { font-size: 24px; font-weight: bold; color: #0056b3; margin-bottom: 20px; }
-        input, select, button { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { background-color: #0056b3; color: white; border: none; cursor: pointer; font-weight: bold; }
-        button:hover { background-color: #004494; }
-        .toggle-link { color: #0056b3; cursor: pointer; text-decoration: underline; font-size: 14px; }
+        body { font-family: sans-serif; text-align: center; padding: 20px; }
+        .container { max-width: 400px; margin: auto; border: 1px solid #ccc; padding: 20px; border-radius: 8px; }
+        input, select, button { width: 100%; margin: 8px 0; padding: 10px; box-sizing: border-box; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="logo">✋ Kelas BISINDO Cianjur</div>
-    
-    <div id="loginSection">
-        <h3>Masuk</h3>
-        <input type="email" id="loginEmail" placeholder="Masukkan Email">
-        <select id="loginRole">
-            <option value="peserta">Peserta</option>
-            <option value="admin">Admin</option>
-        </select>
-        <button onclick="login()">Login</button>
-        <p class="toggle-link" onclick="toggleForm()">Belum punya akun? Daftar Peserta</p>
+    <h2>Kelas BISINDO Cianjur</h2>
+    <p>Belajar Bahasa Isyarat Lebih Mudah</p>
+
+    <div id="login-section">
+        <h3>Login</h3>
+        <input type="email" id="login-email" placeholder="Masukkan Email">
+        <button onclick="login()">Masuk</button>
+        <p>Belum punya akun? <a href="#" onclick="toggleView('register-section')">Daftar di sini</a></p>
+        <p><small><i>Untuk ke halaman admin, gunakan email: admin@cianjur.com</i></small></p>
     </div>
 
-    <div id="registerSection" class="hidden">
+    <div id="register-section" class="hidden">
         <h3>Daftar Peserta</h3>
-        <input type="text" id="regNama" placeholder="Nama Lengkap" required>
-        <select id="regGender">
+        <input type="text" id="reg-nama" placeholder="Nama Lengkap" required>
+        <select id="reg-gender">
             <option value="Laki-laki">Laki-laki</option>
             <option value="Perempuan">Perempuan</option>
         </select>
-        <input type="text" id="regAlamat" placeholder="Alamat (Cianjur dsk.)" required>
-        <input type="text" id="regPekerjaan" placeholder="Pekerjaan" required>
-        <input type="email" id="regEmail" placeholder="Email" required>
-        <button onclick="register()">Daftar & Masuk</button>
-        <p class="toggle-link" onclick="toggleForm()">Sudah punya akun? Login</p>
+        <input type="text" id="reg-alamat" placeholder="Alamat">
+        <input type="text" id="reg-pekerjaan" placeholder="Pekerjaan">
+        <input type="email" id="reg-email" placeholder="Email" required>
+        <button onclick="register()">Daftar</button>
+        <p>Sudah punya akun? <a href="#" onclick="toggleView('login-section')">Kembali ke Login</a></p>
     </div>
 </div>
 
 <script>
-    function toggleForm() {
-        document.getElementById('loginSection').classList.toggle('hidden');
-        document.getElementById('registerSection').classList.toggle('hidden');
+    function toggleView(showId) {
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('register-section').classList.add('hidden');
+        document.getElementById(showId).classList.remove('hidden');
     }
 
     function register() {
-        const nama = document.getElementById('regNama').value;
-        const gender = document.getElementById('regGender').value;
-        const alamat = document.getElementById('regAlamat').value;
-        const pekerjaan = document.getElementById('regPekerjaan').value;
-        const email = document.getElementById('regEmail').value;
+        const nama = document.getElementById('reg-nama').value;
+        const gender = document.getElementById('reg-gender').value;
+        const alamat = document.getElementById('reg-alamat').value;
+        const pekerjaan = document.getElementById('reg-pekerjaan').value;
+        const email = document.getElementById('reg-email').value;
 
-        if(!nama || !alamat || !pekerjaan || !email) return alert("Isi semua data!");
+        if(!nama || !email) return alert("Nama dan Email wajib diisi!");
 
-        let peserta = JSON.parse(localStorage.getItem('dataPeserta')) || [];
-        peserta.push({ nama, gender, alamat, pekerjaan, email });
-        localStorage.setItem('dataPeserta', JSON.stringify(peserta));
+        let users = JSON.parse(localStorage.getItem('bisindo_users')) || [];
+        users.push({ nama, gender, alamat, pekerjaan, email });
+        localStorage.setItem('bisindo_users', JSON.stringify(users));
         
-        alert("Pendaftaran berhasil! Mengalihkan ke menu...");
-        window.location.href = "menu.html";
+        alert("Pendaftaran berhasil! Silakan login.");
+        toggleView('login-section');
     }
 
     function login() {
-        const email = document.getElementById('loginEmail').value;
-        const role = document.getElementById('loginRole').value;
-
-        if(role === 'admin' && email === 'admin@cianjur.com') { // Email admin default
-            window.location.href = "admin.html";
-        } else if (role === 'peserta') {
-            let peserta = JSON.parse(localStorage.getItem('dataPeserta')) || [];
-            let cekPeserta = peserta.find(p => p.email === email);
-            if(cekPeserta) {
-                window.location.href = "menu.html";
-            } else {
-                alert("Email tidak ditemukan. Silakan daftar.");
-            }
+        const email = document.getElementById('login-email').value;
+        if (email === 'admin@cianjur.com') {
+            window.location.href = 'admin.html';
         } else {
-            alert("Email admin salah!");
+            let users = JSON.parse(localStorage.getItem('bisindo_users')) || [];
+            let userExists = users.find(u => u.email === email);
+            if (userExists) {
+                window.location.href = 'dashboard.html';
+            } else {
+                alert("Email tidak ditemukan. Silakan daftar terlebih dahulu.");
+            }
         }
     }
 </script>
